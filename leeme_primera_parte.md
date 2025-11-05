@@ -434,7 +434,7 @@ app_Taller/templates/footer.html:
 
 Nota: Para que now funcione, activa django.template.context_processors.request (viene por defecto). Alternativamente usa from django.utils import timezone y pásalo en vistas; pero plantilla con {{ now|date:"Y" }} suele funcionar si habilitas django.template.context_processors.request o registra django.template.context_processors.now. Si no funciona, reemplaza con 2025 u otra forma.
 
-20. inicio.html con info y una imagen de Cinepolis
+20. inicio.html con info y una imagen de Taller Mecanico
 
 app_Taller/templates/inicio.html:
 
@@ -451,8 +451,8 @@ app_Taller/templates/inicio.html:
   </div>
   <div class="col-md-4">
     <div class="card card-soft p-2">
-      <img src="https://www.cinepolis.com/content/dam/cinepolis-com/hero/hero-cinepolis.jpg" alt="Cinepolis" class="img-fluid rounded">
-      <small class="d-block mt-2 text-muted">Imagen tomada desde la red sobre Cinepolis</small>
+      <img src="https://www.cinepolis.com/content/dam/cinepolis-com/hero/hero-cinepolis.jpg" alt="Taller Mecanico" class="img-fluid rounded">
+      <small class="d-block mt-2 text-muted">Imagen tomada desde la red sobre Taller Mecanico</small>
     </div>
   </div>
 </div>
