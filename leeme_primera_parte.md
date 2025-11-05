@@ -665,7 +665,7 @@ python manage.py migrate
 Crea superusuario para acceder a admin:
 
 python manage.py createsuperuser
-# sigue prompts: email, password...
+ sigue prompts: email, password...
 
 27 (repetido): Por ahora solo trabajar con “cliente”
 
@@ -680,32 +680,32 @@ Mantén clases bootstrap: card, container, table, btn.
 No hagas validaciones JS ni server-side (solicitado).
 
 29. Estructura completa inicial de carpetas y archivos (recomendada)
-UIII_Taller_Mecanico_0446/
-├─ .venv/
-├─ manage.py
-├─ backend_Taller/
-│  ├─ settings.py
-│  ├─ urls.py
-│  └─ ...
-├─ app_Taller/
-│  ├─ migrations/
-│  ├─ templates/
-│  │  ├─ base.html
-│  │  ├─ header.html
-│  │  ├─ navbar.html
-│  │  ├─ footer.html
-│  │  ├─ inicio.html
-│  │  └─ cliente/
-│  │     ├─ agregar_cliente.html
-│  │     ├─ ver_cliente.html
-│  │     ├─ actualizar_cliente.html
-│  │     └─ borrar_cliente.html
-│  ├─ static/   (opcional para css/js)
-│  ├─ models.py
-│  ├─ views.py
-│  ├─ urls.py
-│  └─ admin.py
 
+        UIII_Taller_Mecanico_0446/
+        ├─ .venv/
+        ├─ manage.py
+        ├─ backend_Taller/
+        │  ├─ settings.py
+        │  ├─ urls.py
+        │  └─ ...
+        ├─ app_Taller/
+        │  ├─ migrations/
+        │  ├─ templates/
+        │  │  ├─ base.html
+        │  │  ├─ header.html
+        │  │  ├─ navbar.html
+        │  │  ├─ footer.html
+        │  │  ├─ inicio.html
+        │  │  └─ cliente/
+        │  │     ├─ agregar_cliente.html
+        │  │     ├─ ver_cliente.html
+        │  │     ├─ actualizar_cliente.html
+        │  │     └─ borrar_cliente.html
+        │  ├─ static/   (opcional para css/js)
+        │  ├─ models.py
+        │  ├─ views.py
+        │  ├─ urls.py
+        │  └─ admin.py
 
 Crea carpetas vacías static/ y agrega static/css/style.css si quieres estilos propios.
 
