@@ -164,13 +164,13 @@ from django.db import models
 # ==========================================
 # MODELO: SERVICIO  (Pendiente para usar más adelante)
 # ==========================================
-class Servicio(models.Model):
-    nombre_servicio = models.CharField(max_length=100)
-    descripcion = models.TextField(blank=True, null=True)
-    precio_base = models.DecimalField(max_digits=10, decimal_places=2)
-    tiempo_estimado_horas = models.DecimalField(max_digits=5, decimal_places=2)
-    aplica_garantia = models.BooleanField(default=False)
-    fecha_actualizacion = models.DateTimeField(auto_now=True)
+    class Servicio(models.Model):
+        nombre_servicio = models.CharField(max_length=100)
+        descripcion = models.TextField(blank=True, null=True)
+        precio_base = models.DecimalField(max_digits=10, decimal_places=2)
+        tiempo_estimado_horas = models.DecimalField(max_digits=5, decimal_places=2)
+        aplica_garantia = models.BooleanField(default=False)
+        fecha_actualizacion = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.nombre_servicio
@@ -178,19 +178,19 @@ class Servicio(models.Model):
 # ==========================================
 # MODELO: VEHICULO (Pendiente para usar más adelante)
 # ==========================================
-class Vehiculo(models.Model):
-    cliente = models.ForeignKey(
-        Cliente, on_delete=models.CASCADE, related_name="vehiculos"
-    )
-    servicios = models.ManyToManyField(
-        Servicio, related_name="vehiculos", blank=True
-    )
-    matricula = models.CharField(max_length=20, unique=True)
-    marca = models.CharField(max_length=50)
-    modelo = models.CharField(max_length=50)
-    anio = models.PositiveIntegerField()
-    kilometraje = models.PositiveIntegerField()
-    color = models.CharField(max_length=30)
+    class Vehiculo(models.Model):
+        cliente = models.ForeignKey(
+            Cliente, on_delete=models.CASCADE, related_name="vehiculos"
+        )
+        servicios = models.ManyToManyField(
+            Servicio, related_name="vehiculos", blank=True
+        )
+        matricula = models.CharField(max_length=20, unique=True)
+        marca = models.CharField(max_length=50)
+        modelo = models.CharField(max_length=50)
+        anio = models.PositiveIntegerField()
+        kilometraje = models.PositiveIntegerField()
+        color = models.CharField(max_length=30)
 
     def __str__(self):
         return f"{self.marca} {self.modelo} ({self.matricula})"
@@ -214,27 +214,27 @@ Nos enfocaremos en CRUD de Cliente. Los modelos Servicio y Vehiculo quedan pendi
 Crea o reemplaza app_Taller/views.py con:
 
 # app_Taller/views.py
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Cliente
-from django.urls import reverse
-from django.utils import timezone
-
-def inicio_taller(request):
-    total_clientes = Cliente.objects.count()
-    context = {
-        "total_clientes": total_clientes,
-    }
-    return render(request, "inicio.html", context)
-
-def agregar_cliente(request):
-    if request.method == "POST":
-        # Sin forms.py: coger campos directamente
-        nombre = request.POST.get("nombre", "").strip()
-        apellido = request.POST.get("apellido", "").strip()
-        telefono = request.POST.get("telefono", "").strip()
-        email = request.POST.get("email", "").strip()
-        rfc = request.POST.get("rfc", "").strip()
-        direccion = request.POST.get("direccion", "").strip()
+    from django.shortcuts import render, redirect, get_object_or_404
+    from .models import Cliente
+    from django.urls import reverse
+    from django.utils import timezone
+    
+    def inicio_taller(request):
+        total_clientes = Cliente.objects.count()
+        context = {
+            "total_clientes": total_clientes,
+        }
+        return render(request, "inicio.html", context)
+    
+    def agregar_cliente(request):
+        if request.method == "POST":
+            # Sin forms.py: coger campos directamente
+            nombre = request.POST.get("nombre", "").strip()
+            apellido = request.POST.get("apellido", "").strip()
+            telefono = request.POST.get("telefono", "").strip()
+            email = request.POST.get("email", "").strip()
+            rfc = request.POST.get("rfc", "").strip()
+            direccion = request.POST.get("direccion", "").strip()
 
         Cliente.objects.create(
             nombre=nombre,
@@ -248,37 +248,37 @@ def agregar_cliente(request):
         return redirect("ver_cliente")
     return render(request, "cliente/agregar_cliente.html")
 
-def ver_cliente(request):
-    clientes = Cliente.objects.all().order_by("-fecha_registro")
-    context = {"clientes": clientes}
-    return render(request, "cliente/ver_cliente.html", context)
-
-def actualizar_cliente(request, cliente_id):
-    cliente = get_object_or_404(Cliente, pk=cliente_id)
-    context = {"cliente": cliente}
-    return render(request, "cliente/actualizar_cliente.html", context)
-
-def realizar_actualizacion_cliente(request, cliente_id):
-    cliente = get_object_or_404(Cliente, pk=cliente_id)
-    if request.method == "POST":
-        cliente.nombre = request.POST.get("nombre", cliente.nombre).strip()
-        cliente.apellido = request.POST.get("apellido", cliente.apellido).strip()
-        cliente.telefono = request.POST.get("telefono", cliente.telefono).strip()
-        cliente.email = request.POST.get("email", cliente.email).strip()
-        cliente.rfc = request.POST.get("rfc", cliente.rfc).strip()
-        cliente.direccion = request.POST.get("direccion", cliente.direccion).strip()
-        cliente.save()
-        return redirect("ver_cliente")
-    # Si no es POST, volver al form
-    return redirect("actualizar_cliente", cliente_id=cliente.id)
-
-def borrar_cliente(request, cliente_id):
-    cliente = get_object_or_404(Cliente, pk=cliente_id)
-    if request.method == "POST":
-        cliente.delete()
-        return redirect("ver_cliente")
-    context = {"cliente": cliente}
-    return render(request, "cliente/borrar_cliente.html", context)
+    def ver_cliente(request):
+        clientes = Cliente.objects.all().order_by("-fecha_registro")
+        context = {"clientes": clientes}
+        return render(request, "cliente/ver_cliente.html", context)
+    
+    def actualizar_cliente(request, cliente_id):
+        cliente = get_object_or_404(Cliente, pk=cliente_id)
+        context = {"cliente": cliente}
+        return render(request, "cliente/actualizar_cliente.html", context)
+    
+    def realizar_actualizacion_cliente(request, cliente_id):
+        cliente = get_object_or_404(Cliente, pk=cliente_id)
+        if request.method == "POST":
+            cliente.nombre = request.POST.get("nombre", cliente.nombre).strip()
+            cliente.apellido = request.POST.get("apellido", cliente.apellido).strip()
+            cliente.telefono = request.POST.get("telefono", cliente.telefono).strip()
+            cliente.email = request.POST.get("email", cliente.email).strip()
+            cliente.rfc = request.POST.get("rfc", cliente.rfc).strip()
+            cliente.direccion = request.POST.get("direccion", cliente.direccion).strip()
+            cliente.save()
+            return redirect("ver_cliente")
+        # Si no es POST, volver al form
+        return redirect("actualizar_cliente", cliente_id=cliente.id)
+    
+    def borrar_cliente(request, cliente_id):
+        cliente = get_object_or_404(Cliente, pk=cliente_id)
+        if request.method == "POST":
+            cliente.delete()
+            return redirect("ver_cliente")
+        context = {"cliente": cliente}
+        return render(request, "cliente/borrar_cliente.html", context)
 
 
 Notas:
@@ -291,18 +291,18 @@ Usamos vistas basadas en funciones simples.
 
 Estructura:
 
-app_Taller/
-  templates/
-    base.html
-    header.html
-    navbar.html
-    footer.html
-    inicio.html
-    cliente/
-      agregar_cliente.html
-      ver_cliente.html
-      actualizar_cliente.html
-      borrar_cliente.html
+    app_Taller/
+      templates/
+        base.html
+        header.html
+        navbar.html
+        footer.html
+        inicio.html
+        cliente/
+          agregar_cliente.html
+          ver_cliente.html
+          actualizar_cliente.html
+          borrar_cliente.html
 
 
 Crea esa carpeta y archivos.
@@ -311,12 +311,12 @@ Crea esa carpeta y archivos.
 
 app_Taller/templates/base.html:
 
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{% block title %}Taller Mecánico{% endblock %}</title>
+    <!doctype html>
+    <html lang="es">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{% block title %}Taller Mecánico{% endblock %}</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -349,10 +349,10 @@ app_Taller/templates/base.html:
     </style>
 
     {% block extra_head %}{% endblock %}
-  </head>
-  <body>
-    {% include "header.html" %}
-    {% include "navbar.html" %}
+    </head>
+    <body>
+      {% include "header.html" %}
+      {% include "navbar.html" %}
 
     <main class="container main-container mt-4">
       {% block content %}{% endblock %}
@@ -363,19 +363,19 @@ app_Taller/templates/base.html:
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     {% block extra_js %}{% endblock %}
-  </body>
-</html>
+      </body>
+    </html>
 
 18. navbar.html con las opciones y iconos (no en submenus)
 
 app_Taller/templates/navbar.html:
 
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-  <div class="container">
-    <a class="navbar-brand d-flex align-items-center" href="{% url 'inicio_taller' %}">
-      <i class="bi bi-gear-fill fs-4 me-2" style="color:var(--primary-soft)"></i>
-      <span class="fw-bold">Sistema de Administración Taller Mecánico</span>
-    </a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'inicio_taller' %}">
+          <i class="bi bi-gear-fill fs-4 me-2" style="color:var(--primary-soft)"></i>
+          <span class="fw-bold">Sistema de Administración Taller Mecánico</span>
+        </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
       <span class="navbar-toggler-icon"></span>
@@ -417,19 +417,19 @@ app_Taller/templates/navbar.html:
 
       </ul>
     </div>
-  </div>
-</nav>
+    </div>
+  </nav>
 
 19. footer.html con derechos de autor y fecha y texto fijo
 
 app_Taller/templates/footer.html:
 
-<footer class="footer-fixed bg-white border-top">
-  <div class="container py-2 d-flex justify-content-between">
-    <div>© {{ now|date:"Y" }} Taller Mecánico</div>
-    <div>Creado por Alumno Osvaldo Arellano De La Cruz, Cbtis 128</div>
-  </div>
-</footer>
+    <footer class="footer-fixed bg-white border-top">
+      <div class="container py-2 d-flex justify-content-between">
+        <div>© {{ now|date:"Y" }} Taller Mecánico</div>
+        <div>Creado por Alumno Osvaldo Arellano De La Cruz, Cbtis 128</div>
+      </div>
+    </footer>
 
 
 Nota: Para que now funcione, activa django.template.context_processors.request (viene por defecto). Alternativamente usa from django.utils import timezone y pásalo en vistas; pero plantilla con {{ now|date:"Y" }} suele funcionar si habilitas django.template.context_processors.request o registra django.template.context_processors.now. Si no funciona, reemplaza con 2025 u otra forma.
@@ -438,25 +438,25 @@ Nota: Para que now funcione, activa django.template.context_processors.request (
 
 app_Taller/templates/inicio.html:
 
-{% extends "base.html" %}
-{% block title %}Inicio - Taller{% endblock %}
-{% block content %}
-<div class="row">
-  <div class="col-md-8">
-    <div class="card card-soft p-4">
-      <h3>Bienvenido al Sistema del Taller</h3>
-      <p>Este sistema permite registrar clientes, vehículos y servicios del taller mecánico.</p>
-      <p>Total de clientes registrados: <strong>{{ total_clientes }}</strong></p>
+    {% extends "base.html" %}
+    {% block title %}Inicio - Taller{% endblock %}
+    {% block content %}
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card card-soft p-4">
+          <h3>Bienvenido al Sistema del Taller</h3>
+          <p>Este sistema permite registrar clientes, vehículos y servicios del taller mecánico.</p>
+          <p>Total de clientes registrados: <strong>{{ total_clientes }}</strong></p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card card-soft p-2">
+          <img src="https://www.cinepolis.com/content/dam/cinepolis-com/hero/hero-cinepolis.jpg" alt="Taller Mecanico" class="img-fluid rounded">
+          <small class="d-block mt-2 text-muted">Imagen tomada desde la red sobre Taller Mecanico</small>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="col-md-4">
-    <div class="card card-soft p-2">
-      <img src="https://www.cinepolis.com/content/dam/cinepolis-com/hero/hero-cinepolis.jpg" alt="Taller Mecanico" class="img-fluid rounded">
-      <small class="d-block mt-2 text-muted">Imagen tomada desde la red sobre Taller Mecanico</small>
-    </div>
-  </div>
-</div>
-{% endblock %}
+    {% endblock %}
 
 
 (Sustituye la URL si está protegida o cambia la imagen por otra si es necesario.)
@@ -469,113 +469,113 @@ app_Taller/templates/cliente/ con los archivos de CRUD.
 
 agregar_cliente.html:
 
-{% extends "base.html" %}
-{% block content %}
-<div class="card card-soft p-4">
-  <h4>Agregar Cliente</h4>
-  <form method="post">{% csrf_token %}
-    <div class="mb-2">
-      <label class="form-label">Nombre</label>
-      <input name="nombre" class="form-control" required>
+    {% extends "base.html" %}
+    {% block content %}
+    <div class="card card-soft p-4">
+      <h4>Agregar Cliente</h4>
+      <form method="post">{% csrf_token %}
+        <div class="mb-2">
+          <label class="form-label">Nombre</label>
+          <input name="nombre" class="form-control" required>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Apellido</label>
+          <input name="apellido" class="form-control" required>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Teléfono</label>
+          <input name="telefono" class="form-control">
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Email</label>
+          <input name="email" type="email" class="form-control">
+        </div>
+        <div class="mb-2">
+          <label class="form-label">RFC</label>
+          <input name="rfc" class="form-control">
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Dirección</label>
+          <input name="direccion" class="form-control">
+        </div>
+        <button class="btn btn-primary">Guardar</button>
+        <a href="{% url 'ver_cliente' %}" class="btn btn-secondary">Volver</a>
+      </form>
     </div>
-    <div class="mb-2">
-      <label class="form-label">Apellido</label>
-      <input name="apellido" class="form-control" required>
-    </div>
-    <div class="mb-2">
-      <label class="form-label">Teléfono</label>
-      <input name="telefono" class="form-control">
-    </div>
-    <div class="mb-2">
-      <label class="form-label">Email</label>
-      <input name="email" type="email" class="form-control">
-    </div>
-    <div class="mb-2">
-      <label class="form-label">RFC</label>
-      <input name="rfc" class="form-control">
-    </div>
-    <div class="mb-2">
-      <label class="form-label">Dirección</label>
-      <input name="direccion" class="form-control">
-    </div>
-    <button class="btn btn-primary">Guardar</button>
-    <a href="{% url 'ver_cliente' %}" class="btn btn-secondary">Volver</a>
-  </form>
-</div>
-{% endblock %}
+    {% endblock %}
 
 
 ver_cliente.html (tabla con botones ver, editar, borrar):
 
-{% extends "base.html" %}
-{% block content %}
-<div class="card card-soft p-3">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4>Clientes</h4>
-    <a href="{% url 'agregar_cliente' %}" class="btn btn-success">Agregar cliente</a>
-  </div>
-
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Nombre</th><th>Email</th><th>Teléfono</th><th>RFC</th><th>Dirección</th><th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for c in clientes %}
-      <tr>
-        <td>{{ c.nombre }} {{ c.apellido }}</td>
-        <td>{{ c.email }}</td>
-        <td>{{ c.telefono }}</td>
-        <td>{{ c.rfc }}</td>
-        <td>{{ c.direccion }}</td>
-        <td>
-          <a class="btn btn-sm btn-info" href="{% url 'actualizar_cliente' c.id %}">Editar</a>
-          <a class="btn btn-sm btn-danger" href="{% url 'borrar_cliente' c.id %}">Borrar</a>
-        </td>
-      </tr>
-      {% empty %}
-      <tr><td colspan="6">No hay clientes registrados.</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-{% endblock %}
+    {% extends "base.html" %}
+    {% block content %}
+    <div class="card card-soft p-3">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>Clientes</h4>
+        <a href="{% url 'agregar_cliente' %}" class="btn btn-success">Agregar cliente</a>
+      </div>
+    
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Nombre</th><th>Email</th><th>Teléfono</th><th>RFC</th><th>Dirección</th><th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in clientes %}
+          <tr>
+            <td>{{ c.nombre }} {{ c.apellido }}</td>
+            <td>{{ c.email }}</td>
+            <td>{{ c.telefono }}</td>
+            <td>{{ c.rfc }}</td>
+            <td>{{ c.direccion }}</td>
+            <td>
+              <a class="btn btn-sm btn-info" href="{% url 'actualizar_cliente' c.id %}">Editar</a>
+              <a class="btn btn-sm btn-danger" href="{% url 'borrar_cliente' c.id %}">Borrar</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6">No hay clientes registrados.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endblock %}
 
 
 actualizar_cliente.html:
 
-{% extends "base.html" %}
-{% block content %}
-<div class="card card-soft p-4">
-  <h4>Actualizar Cliente</h4>
-  <form method="post" action="{% url 'realizar_actualizacion_cliente' cliente.id %}">{% csrf_token %}
-    <div class="mb-2"><label>Nombre</label><input name="nombre" value="{{ cliente.nombre }}" class="form-control"></div>
-    <div class="mb-2"><label>Apellido</label><input name="apellido" value="{{ cliente.apellido }}" class="form-control"></div>
-    <div class="mb-2"><label>Teléfono</label><input name="telefono" value="{{ cliente.telefono }}" class="form-control"></div>
-    <div class="mb-2"><label>Email</label><input name="email" value="{{ cliente.email }}" class="form-control"></div>
-    <div class="mb-2"><label>RFC</label><input name="rfc" value="{{ cliente.rfc }}" class="form-control"></div>
-    <div class="mb-2"><label>Dirección</label><input name="direccion" value="{{ cliente.direccion }}" class="form-control"></div>
-    <button class="btn btn-primary">Guardar cambios</button>
-    <a href="{% url 'ver_cliente' %}" class="btn btn-secondary">Cancelar</a>
-  </form>
-</div>
-{% endblock %}
+    {% extends "base.html" %}
+    {% block content %}
+    <div class="card card-soft p-4">
+      <h4>Actualizar Cliente</h4>
+      <form method="post" action="{% url 'realizar_actualizacion_cliente' cliente.id %}">{% csrf_token %}
+        <div class="mb-2"><label>Nombre</label><input name="nombre" value="{{ cliente.nombre }}" class="form-control"></div>
+        <div class="mb-2"><label>Apellido</label><input name="apellido" value="{{ cliente.apellido }}" class="form-control"></div>
+        <div class="mb-2"><label>Teléfono</label><input name="telefono" value="{{ cliente.telefono }}" class="form-control"></div>
+        <div class="mb-2"><label>Email</label><input name="email" value="{{ cliente.email }}" class="form-control"></div>
+        <div class="mb-2"><label>RFC</label><input name="rfc" value="{{ cliente.rfc }}" class="form-control"></div>
+        <div class="mb-2"><label>Dirección</label><input name="direccion" value="{{ cliente.direccion }}" class="form-control"></div>
+        <button class="btn btn-primary">Guardar cambios</button>
+        <a href="{% url 'ver_cliente' %}" class="btn btn-secondary">Cancelar</a>
+      </form>
+    </div>
+    {% endblock %}
 
 
 borrar_cliente.html:
 
-{% extends "base.html" %}
-{% block content %}
-<div class="card card-soft p-4">
-  <h4>Eliminar Cliente</h4>
-  <p>¿Seguro que quieres eliminar a <strong>{{ cliente.nombre }} {{ cliente.apellido }}</strong>?</p>
-  <form method="post">{% csrf_token %}
-    <button type="submit" class="btn btn-danger">Sí, eliminar</button>
-    <a href="{% url 'ver_cliente' %}" class="btn btn-secondary">Cancelar</a>
-  </form>
-</div>
-{% endblock %}
+    {% extends "base.html" %}
+    {% block content %}
+    <div class="card card-soft p-4">
+      <h4>Eliminar Cliente</h4>
+      <p>¿Seguro que quieres eliminar a <strong>{{ cliente.nombre }} {{ cliente.apellido }}</strong>?</p>
+      <form method="post">{% csrf_token %}
+        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+        <a href="{% url 'ver_cliente' %}" class="btn btn-secondary">Cancelar</a>
+      </form>
+    </div>
+    {% endblock %}
 
 23. No utilizar forms.py
 
@@ -586,11 +586,11 @@ borrar_cliente.html:
 Crea app_Taller/urls.py con:
 
 # app_Taller/urls.py
-from django.urls import path
-from . import views
+    from django.urls import path
+    from . import views
 
-urlpatterns = [
-    path('', views.inicio_taller, name='inicio_taller'),
+    urlpatterns = [
+        path('', views.inicio_taller, name='inicio_taller'),
 
     # Clientes
     path('cliente/agregar/', views.agregar_cliente, name='agregar_cliente'),
@@ -598,62 +598,62 @@ urlpatterns = [
     path('cliente/actualizar/<int:cliente_id>/', views.actualizar_cliente, name='actualizar_cliente'),
     path('cliente/realizar_actualizacion/<int:cliente_id>/', views.realizar_actualizacion_cliente, name='realizar_actualizacion_cliente'),
     path('cliente/borrar/<int:cliente_id>/', views.borrar_cliente, name='borrar_cliente'),
-]
+    ]
 
 25. Agregar app_Taller en settings.py de backend_Taller
 
 En backend_Taller/settings.py localiza INSTALLED_APPS y añade 'app_Taller',:
 
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    ...
-    'app_Taller',
-]
+    INSTALLED_APPS = [
+        'django.contrib.admin',
+        'django.contrib.auth',
+        ...
+        'app_Taller',
+    ]
 
 
 Asegúrate de que DIRS en TEMPLATES permita cargar plantillas desde apps (por defecto Django busca en app/templates). Si quieres templates globales en BASE_DIR / 'templates' agrega:
 
-TEMPLATES = [
-    {
-        ...
-        'DIRS': [BASE_DIR / 'templates'],
-        ...
-    },
-]
+    TEMPLATES = [
+        {
+            ...
+            'DIRS': [BASE_DIR / 'templates'],
+            ...
+        },
+    ]
 
 26. Configuraciones en backend_Taller/urls.py para enlazar con app_Taller
 
 En backend_Taller/urls.py:
-
-from django.contrib import admin
-from django.urls import path, include
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('app_Taller.urls')),  # rutas de la app (inicio en /)
-]
+    
+    from django.contrib import admin
+    from django.urls import path, include
+    
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('', include('app_Taller.urls')),  # rutas de la app (inicio en /)
+    ]
 
 
 Para archivos estáticos en desarrollo (opcional):
 
-from django.conf import settings
-from django.conf.urls.static import static
-
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
-27. Registrar modelos en admin.py y volver a migrar
-
-app_Taller/admin.py:
-
-from django.contrib import admin
-from .models import Cliente  # por ahora sólo Cliente
-
-@admin.register(Cliente)
-class ClienteAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'apellido', 'email', 'telefono', 'rfc', 'fecha_registro')
-    search_fields = ('nombre', 'apellido', 'email', 'rfc')
+    from django.conf import settings
+    from django.conf.urls.static import static
+    
+    if settings.DEBUG:
+        urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    
+    27. Registrar modelos en admin.py y volver a migrar
+    
+    app_Taller/admin.py:
+    
+    from django.contrib import admin
+    from .models import Cliente  # por ahora sólo Cliente
+    
+    @admin.register(Cliente)
+    class ClienteAdmin(admin.ModelAdmin):
+        list_display = ('nombre', 'apellido', 'email', 'telefono', 'rfc', 'fecha_registro')
+        search_fields = ('nombre', 'apellido', 'email', 'rfc')
 
 
 Luego:
