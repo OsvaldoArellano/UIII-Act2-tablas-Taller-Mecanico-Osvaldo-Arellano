@@ -1,5 +1,4 @@
-
-1. Crear la carpeta del proyecto
+# 1. Crear la carpeta del proyecto
 
 En tu ubicación preferida (ej. Documentos):
 
@@ -14,7 +13,7 @@ Linux / macOS:
 mkdir -p UIII_Taller_Mecanico_0446
 cd UIII_Taller_Mecanico_0446
 
-2. Abrir VS Code sobre la carpeta
+# 2. Abrir VS Code sobre la carpeta
 
 Desde la misma carpeta en terminal:
 
@@ -25,7 +24,7 @@ code .
 
 Alternativa: abrir VS Code y usar Archivo > Abrir carpeta... y seleccionar UIII_Taller_Mecanico_0446.
 
-3. Abrir terminal en VS Code
+# 3. Abrir terminal en VS Code
 
 Dentro de VS Code:
 
@@ -33,7 +32,7 @@ Atajo: Ctrl + \ (en muchas teclas es Ctrl+ ) — Ctrl+` (la tecla de la tilde in
 
 O menú: Ver > Terminal.
 
-4. Crear carpeta entorno virtual .venv desde terminal de VS Code
+# 4. Crear carpeta entorno virtual .venv desde terminal de VS Code
 
 Dentro de la carpeta del proyecto ejecuta:
 
@@ -49,7 +48,7 @@ python3 -m venv .venv
 
 Esto crea la carpeta .venv con el entorno virtual.
 
-5. Activar el entorno virtual
+# 5. Activar el entorno virtual
 
 Windows PowerShell:
 
@@ -69,14 +68,14 @@ source .venv/bin/activate
 
 Verifica con python --version o which python / Get-Command python.
 
-6. Activar intérprete de Python en VS Code
+# 6. Activar intérprete de Python en VS Code
 
 Ctrl+Shift+P → escribe Python: Select Interpreter.
 
 Selecciona la que apunta a tu .venv (algo como .venv\Scripts\python o .venv/bin/python).
 Esto hace que VS Code use ese intérprete para ejecutar y depurar.
 
-7. Instalar Django
+# 7. Instalar Django
 
 Con el entorno activado:
 
@@ -86,7 +85,7 @@ pip install django
 
 (Confirma con django-admin --version).
 
-8. Crear proyecto backend_Taller sin duplicar carpeta
+# 8. Crear proyecto backend_Taller sin duplicar carpeta
 
 Para evitar crear una carpeta extra, desde UIII_Taller_Mecanico_0446 ejecuta:
 
@@ -106,7 +105,7 @@ UIII_Taller_Mecanico_0446/
     wsgi.py
     asgi.py
 
-9. Ejecutar servidor en el puerto 8446
+# 9. Ejecutar servidor en el puerto 8446
 
 Within the activated venv and project folder:
 
@@ -119,7 +118,7 @@ Si quieres permitir conexiones externas (red local):
 
 python manage.py runserver 0.0.0.0:8446
 
-10. Copiar y pegar el link en el navegador
+# 10. Copiar y pegar el link en el navegador
 
 Abre tu navegador y pega:
 
@@ -130,7 +129,7 @@ http://127.0.0.1:8446/
 
 http://localhost:8446/
 
-11. Crear aplicación app_Taller
+# 11. Crear aplicación app_Taller
 
 Con el entorno activado y en la raíz del proyecto:
 
@@ -139,7 +138,7 @@ python manage.py startapp app_Taller
 
 Esto crea app_Taller/ con models.py, views.py, admin.py, apps.py, migrations/, etc.
 
-12. Aquí el models.py (usa el que ya diste)
+# 12. Aquí el models.py (usa el que ya diste)
 
 Copia tu código dentro de app_Taller/models.py (reemplaza su contenido). Por ejemplo:
 
@@ -195,7 +194,7 @@ from django.db import models
     def __str__(self):
         return f"{self.marca} {self.modelo} ({self.matricula})"
 
-12.5 Procedimiento para realizar migraciones (makemigrations y migrate)
+# 12.5 Procedimiento para realizar migraciones (makemigrations y migrate)
 
 Primero agrega la app en INSTALLED_APPS (ver 25). Luego:
 
@@ -205,11 +204,11 @@ python manage.py migrate
 
 Esto crea tablas en la base de datos (por defecto SQLite).
 
-13. Primero trabajamos con el MODELO: CLIENTE
+# 13. Primero trabajamos con el MODELO: CLIENTE
 
 Nos enfocaremos en CRUD de Cliente. Los modelos Servicio y Vehiculo quedan pendientes.
 
-14. views.py de app_Taller — funciones (inicio_taller, agregar_cliente, actualizar_cliente, realizar_actualizacion_cliente, borrar_cliente)
+# 14. views.py de app_Taller — funciones (inicio_taller, agregar_cliente, actualizar_cliente, realizar_actualizacion_cliente, borrar_cliente)
 
 Crea o reemplaza app_Taller/views.py con:
 
@@ -287,7 +286,7 @@ No se valida la entrada (solicitaste no validar).
 
 Usamos vistas basadas en funciones simples.
 
-15. Crear carpeta templates dentro de app_Taller
+# 15. Crear carpeta templates dentro de app_Taller
 
 Estructura:
 
@@ -307,7 +306,7 @@ Estructura:
 
 Crea esa carpeta y archivos.
 
-16 & 17. base.html con Bootstrap (CSS & JS) y estructura
+# 16 & 17. base.html con Bootstrap (CSS & JS) y estructura
 
 app_Taller/templates/base.html:
 
@@ -366,7 +365,7 @@ app_Taller/templates/base.html:
       </body>
     </html>
 
-18. navbar.html con las opciones y iconos (no en submenus)
+# 18. navbar.html con las opciones y iconos (no en submenus)
 
 app_Taller/templates/navbar.html:
 
@@ -420,7 +419,7 @@ app_Taller/templates/navbar.html:
     </div>
   </nav>
 
-19. footer.html con derechos de autor y fecha y texto fijo
+# 19. footer.html con derechos de autor y fecha y texto fijo
 
 app_Taller/templates/footer.html:
 
@@ -434,7 +433,7 @@ app_Taller/templates/footer.html:
 
 Nota: Para que now funcione, activa django.template.context_processors.request (viene por defecto). Alternativamente usa from django.utils import timezone y pásalo en vistas; pero plantilla con {{ now|date:"Y" }} suele funcionar si habilitas django.template.context_processors.request o registra django.template.context_processors.now. Si no funciona, reemplaza con 2025 u otra forma.
 
-20. inicio.html con info y una imagen de Taller Mecanico
+# 20. inicio.html con info y una imagen de Taller Mecanico
 
 app_Taller/templates/inicio.html:
 
@@ -461,11 +460,11 @@ app_Taller/templates/inicio.html:
 
 (Sustituye la URL si está protegida o cambia la imagen por otra si es necesario.)
 
-21. Subcarpeta cliente dentro de templates (ya indicada arriba)
+# 21. Subcarpeta cliente dentro de templates (ya indicada arriba)
 
 app_Taller/templates/cliente/ con los archivos de CRUD.
 
-22. Templates cliente/*
+# 22. Templates cliente/*
 
 agregar_cliente.html:
 
@@ -577,11 +576,11 @@ borrar_cliente.html:
     </div>
     {% endblock %}
 
-23. No utilizar forms.py
+# 23. No utilizar forms.py
 
 (Ya cumplido: las vistas usan request.POST directo.)
 
-24. urls.py en app_Taller (rutas CRUD)
+# 24. urls.py en app_Taller (rutas CRUD)
 
 Crea app_Taller/urls.py con:
 
@@ -600,7 +599,7 @@ Crea app_Taller/urls.py con:
     path('cliente/borrar/<int:cliente_id>/', views.borrar_cliente, name='borrar_cliente'),
     ]
 
-25. Agregar app_Taller en settings.py de backend_Taller
+# 25. Agregar app_Taller en settings.py de backend_Taller
 
 En backend_Taller/settings.py localiza INSTALLED_APPS y añade 'app_Taller',:
 
@@ -622,7 +621,7 @@ Asegúrate de que DIRS en TEMPLATES permita cargar plantillas desde apps (por de
         },
     ]
 
-26. Configuraciones en backend_Taller/urls.py para enlazar con app_Taller
+# 26. Configuraciones en backend_Taller/urls.py para enlazar con app_Taller
 
 En backend_Taller/urls.py:
     
@@ -667,11 +666,11 @@ Crea superusuario para acceder a admin:
 python manage.py createsuperuser
  sigue prompts: email, password...
 
-27 (repetido): Por ahora solo trabajar con “cliente”
+# 27. (repetido): Por ahora solo trabajar con “cliente”
 
 Mantén Servicio y Vehiculo en models.py pero no los usamos en templates ni vistas todavía.
 
-28. Estética: colores suaves, páginas sencillas
+# 28. Estética: colores suaves, páginas sencillas
 
 Usamos Bootstrap + variables CSS en base.html.
 
@@ -679,7 +678,7 @@ Mantén clases bootstrap: card, container, table, btn.
 
 No hagas validaciones JS ni server-side (solicitado).
 
-29. Estructura completa inicial de carpetas y archivos (recomendada)
+# 29. Estructura completa inicial de carpetas y archivos (recomendada)
 
         UIII_Taller_Mecanico_0446/
         ├─ .venv/
@@ -709,7 +708,7 @@ No hagas validaciones JS ni server-side (solicitado).
 
 Crea carpetas vacías static/ y agrega static/css/style.css si quieres estilos propios.
 
-30. Proyecto totalmente funcional (pasos finales de verificación)
+# 30. Proyecto totalmente funcional (pasos finales de verificación)
 
 Activar .venv.
 
@@ -725,7 +724,7 @@ Ir a http://127.0.0.1:8446/cliente/agregar/ para agregar cliente.
 
 Ver clientes en http://127.0.0.1:8446/cliente/ver/.
 
-31. Finalmente ejecutar servidor en el puerto 8446
+# 31. Finalmente ejecutar servidor en el puerto 8446
 
 (Ya visto en el paso 9)
 
