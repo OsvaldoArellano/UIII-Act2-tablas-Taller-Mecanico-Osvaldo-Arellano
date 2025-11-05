@@ -4,14 +4,14 @@ En tu ubicación preferida (ej. Documentos):
 
 Windows / PowerShell:
 
-mkdir UIII_Taller_Mecanico_0446
-cd UIII_Taller_Mecanico_0446
+    mkdir UIII_Taller_Mecanico_0446
+    cd UIII_Taller_Mecanico_0446
 
 
 Linux / macOS:
 
-mkdir -p UIII_Taller_Mecanico_0446
-cd UIII_Taller_Mecanico_0446
+    mkdir -p UIII_Taller_Mecanico_0446
+    cd UIII_Taller_Mecanico_0446
 
 # 2. Abrir VS Code sobre la carpeta
 
@@ -38,12 +38,12 @@ Dentro de la carpeta del proyecto ejecuta:
 
 Windows (PowerShell):
 
-python -m venv .venv
+    python -m venv .venv
 
 
 Linux / macOS:
 
-python3 -m venv .venv
+    python3 -m venv .venv
 
 
 Esto crea la carpeta .venv con el entorno virtual.
@@ -52,18 +52,18 @@ Esto crea la carpeta .venv con el entorno virtual.
 
 Windows PowerShell:
 
-.venv\Scripts\Activate.ps1
-# o (PowerShell) . .venv\Scripts\Activate.ps1
+    .venv\Scripts\Activate.ps1
+    # o (PowerShell) . .venv\Scripts\Activate.ps1
 
 
 Windows (cmd):
 
-.venv\Scripts\activate.bat
+    .venv\Scripts\activate.bat
 
 
 Linux / macOS:
 
-source .venv/bin/activate
+    source .venv/bin/activate
 
 
 Verifica con python --version o which python / Get-Command python.
@@ -79,8 +79,8 @@ Esto hace que VS Code use ese intérprete para ejecutar y depurar.
 
 Con el entorno activado:
 
-pip install --upgrade pip
-pip install django
+    pip install --upgrade pip
+    pip install django
 
 
 (Confirma con django-admin --version).
@@ -89,27 +89,27 @@ pip install django
 
 Para evitar crear una carpeta extra, desde UIII_Taller_Mecanico_0446 ejecuta:
 
-django-admin startproject backend_Taller .
+    django-admin startproject backend_Taller .
 
 
 Observación: el . al final indica "crear el proyecto en la carpeta actual" — así evitas backend_Taller/backend_Taller.
 
 Estructura mínima tras esto:
 
-UIII_Taller_Mecanico_0446/
-  manage.py
-  backend_Taller/
-    __init__.py
-    settings.py
-    urls.py
-    wsgi.py
-    asgi.py
+    UIII_Taller_Mecanico_0446/
+      manage.py
+      backend_Taller/
+        __init__.py
+        settings.py
+        urls.py
+        wsgi.py
+        asgi.py
 
 # 9. Ejecutar servidor en el puerto 8446
 
 Within the activated venv and project folder:
 
-python manage.py runserver 8446
+    python manage.py runserver 8446
 
 
 Esto iniciará el servidor en http://127.0.0.1:8446/.
@@ -133,17 +133,17 @@ http://localhost:8446/
 
 Con el entorno activado y en la raíz del proyecto:
 
-python manage.py startapp app_Taller
+    python manage.py startapp app_Taller
 
 
 Esto crea app_Taller/ con models.py, views.py, admin.py, apps.py, migrations/, etc.
 
 # 12. Aquí el models.py (usa el que ya diste)
 
-Copia tu código dentro de app_Taller/models.py (reemplaza su contenido). Por ejemplo:
 
 # app_Taller/models.py
-from django.db import models
+
+    from django.db import models
 
 # ==========================================
 # MODELO: CLIENTE
