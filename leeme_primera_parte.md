@@ -1,6 +1,3 @@
-Pensado durante 14s
-
-Perfecto — te doy paso a paso TODO lo que pides para dejar el proyecto Django UIII_Taller_Mecanico_0446 / backend_Taller / app_Taller funcionando con CRUD de Cliente (sin forms.py), plantillas Bootstrap, y servidor en el puerto 8446. Voy a usar comandos para Windows (PowerShell) y Linux/macOS cuando aplique. Todo en español y listo para pegar en tu terminal/VSCode.
 
 1. Crear la carpeta del proyecto
 
